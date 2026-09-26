@@ -13,16 +13,16 @@ jobs:
       - name: Kodu gotur
         uses: actions/checkout@v4
 
-      - name: Java 17 qur
+      - name: Java 21 qur
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
 
-      - name: Node.js qur
+      - name: Node.js 22 qur
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Capacitor ve Android muhiti hazirla
         run: |
