@@ -1,0 +1,50 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kodu gotur
+        uses: actions/checkout@v4
+
+      - name: Node.js qur
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Java 17 qur
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Android SDK qur
+        uses: android-actions/setup-android@v3
+
+      - name: Paketleri yukle
+        run: |
+          npm init -y
+          npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor-community/admob
+
+      - name: Capacitor Android hazirla
+        run: |
+          npx cap init "Saleh Evolution" "com.saleh.evolution" --web-dir .
+          npx cap add android
+          npx cap sync android
+
+      - name: APK Yig
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: APK-ni yukle
+        uses: actions/upload-artifact@v4
+        with:
+          name: saleh-evolution-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
