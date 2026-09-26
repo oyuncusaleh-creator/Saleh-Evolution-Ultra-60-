@@ -8,34 +8,31 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Kodu gotur
         uses: actions/checkout@v4
 
-      - name: Node.js qur
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
       - name: Java 17 qur
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: 'temurin'
           java-version: '17'
 
-      - name: Android SDK qur
-        uses: android-actions/setup-android@v3
+      - name: Node.js qur
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-      - name: Paketleri yukle
+      - name: Capacitor ve Android muhiti hazirla
         run: |
+          mkdir -p www
+          cp index.html www/
           npm init -y
-          npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor-community/admob
-
-      - name: Capacitor Android hazirla
-        run: |
-          npx cap init "Saleh Evolution" "com.saleh.evolution" --web-dir .
+          npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
+          npx cap init "Saleh Evolution" "com.saleh.evolution" --web-dir www
           npx cap add android
-          npx cap sync android
+          npx cap copy android
 
       - name: APK Yig
         run: |
@@ -46,5 +43,5 @@ jobs:
       - name: APK-ni yukle
         uses: actions/upload-artifact@v4
         with:
-          name: saleh-evolution-apk
+          name: Saleh-Evolution-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
