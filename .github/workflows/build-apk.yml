@@ -37,6 +37,7 @@ jobs:
       - name: Tətbiq İkonasını Hazırla
         run: |
           if [ -f icon.png ]; then
+            python3 -m pip install pillow
             python3 -c "
           import os
           from PIL import Image
