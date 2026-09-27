@@ -30,9 +30,37 @@ jobs:
           cp index.html www/
           npm init -y
           npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
-          npx cap init "Saleh Evolution Ultra 60 " "com.saleh.evolution" --web-dir www
+          npx cap init "Saleh Evolution Ultra 60" "com.saleh.evolution" --web-dir www
           npx cap add android
           npx cap copy android
+
+      - name: Tətbiq İkonasını Hazırla
+        run: |
+          if [ -f icon.png ]; then
+            python3 -c "
+          import os
+          from PIL import Image
+
+          sizes = {
+              'mipmap-mdpi': 48,
+              'mipmap-hdpi': 72,
+              'mipmap-xhdpi': 96,
+              'mipmap-xxhdpi': 144,
+              'mipmap-xxxhdpi': 192,
+          }
+
+          img = Image.open('icon.png').convert('RGBA')
+          res_dir = 'android/app/src/main/res'
+
+          for folder, size in sizes.items():
+              d = os.path.join(res_dir, folder)
+              os.makedirs(d, exist_ok=True)
+              resized = img.resize((size, size), Image.LANCZOS)
+              resized.save(os.path.join(d, 'ic_launcher.png'))
+              resized.save(os.path.join(d, 'ic_launcher_round.png'))
+              resized.save(os.path.join(d, 'ic_launcher_foreground.png'))
+          "
+          fi
 
       - name: APK Yig
         run: |
@@ -43,5 +71,5 @@ jobs:
       - name: APK-ni yukle
         uses: actions/upload-artifact@v4
         with:
-          name: Saleh-Evolution-APK
+          name: Saleh-Evolution-Ultra-60-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
